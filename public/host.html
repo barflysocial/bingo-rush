@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bingo Rush Host</title><link rel="stylesheet" href="/styles.css?v=1.5.0"></head><body>
+<main class="host-shell">
+  <div class="topbar"><div class="brand">BINGO RUSH • HOST</div><div class="pill" id="hostState">NO GAME</div></div>
+
+  <section id="createPane" class="host-grid">
+    <div class="card">
+      <div class="kicker left">CREATE A HOSTED GAME ROOM</div><h2>Game Setup</h2>
+      <div class="field"><label>CUSTOM GAME CODE</label><input id="customGameCode" maxlength="15" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="BARFLY"><div class="mini-help">4–15 letters or numbers. Players use this same code for every round in this room.</div></div>
+      <div class="field"><label>GAME / EVENT NAME</label><input id="roundName" value="Bingo Rush" maxlength="60"></div>
+      <div class="field"><label>SPONSOR NAME</label><input id="sponsorName" value="" maxlength="80" placeholder="Leave blank if there is no sponsor"></div>
+      <div class="field"><label>SPONSOR LOGO</label><input id="sponsorLogoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><div class="mini-help">PNG, JPG, WEBP or GIF. The logo is stored with this game room.</div></div>
+      <div class="field"><label>OR SPONSOR LOGO URL</label><input id="sponsorLogoUrl" placeholder="https://..."></div>
+      <div class="split-fields"><div class="field"><label>CALL TIMER</label><select id="callDuration"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>8</option><option>10</option></select></div><div class="field"><label>GAME MODE</label><select id="gameMode"><option value="solo" selected>Solo</option><option value="teams">Teams</option></select></div></div>
+      <div class="field"><label>WIN CONDITION</label><select id="winCondition"><option value="timed" selected>Timed round</option><option value="target">First to Bingo goal</option></select></div>
+      <div id="timedSettings" class="field"><label>ROUND TIMER (MINUTES)</label><input id="roundMinutes" type="number" min="1" max="120" value="15"></div>
+      <div id="targetSettings" class="field hidden"><label>BINGO GOAL</label><input id="bingoTarget" type="number" min="1" max="999" value="20"><div class="mini-help">Solo: first player to goal. Teams: first team total to goal.</div></div>
+      <div class="field"><label>LATE JOINING</label><select id="lateJoinPolicy"><option value="allowed" selected>Allowed until game ends</option><option value="cutoff">Allowed until cutoff</option><option value="closed">Closed when game starts</option></select></div>
+      <div id="lateCutoffField" class="field hidden"><label>LATE JOIN CUTOFF (MINUTES)</label><input id="lateJoinCutoffMinutes" type="number" min="1" max="120" value="5"></div>
+      <div id="teamSetup" class="field hidden"><label>STARTING TEAM NAMES</label><textarea id="teamNames" rows="4" placeholder="Bayou Ballers
+Table 7
+The Misfits"></textarea><div class="mini-help">One team per line. You can add or rename teams from the dashboard later.</div></div>
+      <button id="createRound" class="premium full">CREATE GAME ROOM</button><div id="createError" class="error"></div>
+    </div>
+    <div class="card center"><img class="logo-card" src="/assets/bingo-rush-title.png" alt="Bingo Rush"><p class="muted">Create one reusable game room. Players enter your custom Game Code, and you can reset the room for as many rounds as you want.</p><div class="feature-stack"><span>CUSTOM REUSABLE GAME CODE</span><span>HOST-SYNCHRONIZED CALLS</span><span>375-BALL DECK CYCLES</span><span>TOP-3 TEAM SCORING</span></div></div>
+  </section>
+
+  <section id="managePane" class="hidden">
+    <div class="host-dashboard-tabs" role="tablist" aria-label="Host dashboard views">
+      <button id="controlTab" class="host-dashboard-tab active" type="button" role="tab" aria-selected="true">HOST CONTROL</button>
+      <button id="qrTab" class="host-dashboard-tab" type="button" role="tab" aria-selected="false">QR DISPLAY</button>
+    </div>
+
+    <div id="controlPanel" class="host-dashboard-panel active">
+      <div class="host-grid">
+        <div class="card center"><div class="kicker">PLAYER JOIN CODE</div><div id="code" class="host-game-code">—</div><p class="muted">Players open <b id="playerSite"></b> and enter this code.</p><div class="host-actions"><button id="copyCode" class="premium secondary">COPY CODE</button><button id="shareCode" class="premium secondary">SHARE GAME</button></div><div id="hostSponsor" class="sponsor"></div></div>
+        <div class="card center"><div class="host-stat-grid"><div><div class="big-stat" id="hostTimer">15:00</div><p class="muted" id="hostTimerLabel">ROUND TIME</p></div><div><div class="big-stat" id="hostPlayers">0</div><p class="muted">PLAYERS</p></div></div><div class="pill host-call-pill">CURRENT CALL <b id="hostCall">—</b></div><div class="pill top-gap">CALL SPEED <b id="hostSpeed">5s</b></div><div class="pill top-gap">DECK CYCLE <b id="deckCycle">—</b></div><div class="pill top-gap">WIN CONDITION <b id="hostWinCondition">—</b></div></div>
+      </div>
+      <div class="card"><div class="section-title-row"><div><div class="kicker left">ACTIVE GAME ROOM</div><h2><span id="roundTitle">Bingo Rush</span></h2></div><div class="pill">CODE <b id="headerCode">—</b></div></div><div class="host-actions"><button id="startBtn" class="premium">START ROUND</button><button id="pauseBtn" class="premium secondary">PAUSE</button><button id="resumeBtn" class="premium secondary">RESUME</button><button id="endBtn" class="premium danger">END ROUND</button><button id="resetBtn" class="premium reset">NEXT ROUND / RESET</button></div><div id="hostNotice" class="mini-help center"></div></div>
+
+      <div id="teamManagerCard" class="card hidden"><div class="section-title-row"><h2>Teams</h2><button id="addTeamBtn" class="premium secondary compact">ADD TEAM</button></div><p class="muted">Any team size is allowed. Only each team's top 3 player scores count.</p><div id="teamManager"></div></div>
+
+      <div class="host-grid">
+        <div class="card"><h2>Player Roster</h2><div id="playerRoster"></div></div>
+        <div class="card"><h2>Live Individual Leaderboard</h2><div id="hostLeaderboard"></div></div>
+      </div>
+      <div id="teamLeaderboardCard" class="card hidden"><h2>Live Team Leaderboard</h2><p class="muted">Team score = top 3 individual scores. Ties go to the team that reached the tied score first, measured to the millisecond.</p><div id="hostTeamLeaderboard"></div></div>
+
+      <div class="card global-reset-card">
+        <div><div class="kicker left">DANGER ZONE</div><h2>Global Host Reset</h2><p class="muted">Completely deletes this game room, players, teams, scores, sponsor, settings, and Game Code. Use only when you want to start over from scratch.</p></div>
+        <button id="globalResetBtn" class="premium danger full">GLOBAL HOST RESET</button>
+      </div>
+    </div>
+
+    <div id="qrPanel" class="host-dashboard-panel">
+      <div class="card">
+        <div class="section-title-row"><div><div class="kicker left">1920 × 1080 PRESENTATION SCREEN</div><h2>Game QR Display</h2></div><div class="pill">CODE <b id="qrHeaderCode">—</b></div></div>
+        <p class="muted">Put this screen on a TV, projector, or venue display. Players can scan the QR code or simply enter the Game Code.</p>
+        <div class="qr-preview-wrap">
+          <div id="qrPreview" class="qr-stage qr-stage-preview">
+            <div class="qr-stage-left"><img src="/assets/bingo-rush-title.png" alt="Bingo Rush" class="qr-title-art"><div id="qrSponsorPreview" class="qr-sponsor-line"></div></div>
+            <div class="qr-stage-right"><div class="qr-scan-label">SCAN TO JOIN</div><div class="qr-box"><img id="qrPreviewImage" alt="Game QR code"></div><div class="qr-or">OR ENTER GAME CODE</div><div id="qrPreviewCode" class="qr-display-code">—</div><div id="qrPreviewUrl" class="qr-join-url"></div></div>
+          </div>
+        </div>
+        <div class="host-actions top-gap"><button id="openQrScreen" class="premium">OPEN 1920 × 1080 DISPLAY</button><button id="refreshQr" class="premium secondary">REFRESH QR</button></div>
+      </div>
+    </div>
+  </section>
+</main><script src="/host.js?v=1.5.0"></script></body></html>
