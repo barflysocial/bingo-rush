@@ -1,0 +1,84 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b1c"><title>Bingo Rush</title><!--SOCIAL_META--><link rel="stylesheet" href="/styles.css?v=1.6.12"></head>
+<body><main class="shell">
+<section id="intro" class="screen active"><div class="hero"><img src="/assets/bingo-rush-title.png" alt="Bingo Rush"><div class="hero-actions"><button id="enterGame" class="premium full">START</button></div></div></section>
+
+<section id="codeEntry" class="screen">
+  <div class="card join-code-card">
+    <div class="kicker">JOIN A BINGO RUSH GAME</div>
+    <h1 class="join-title">ENTER GAME CODE</h1>
+    <p class="muted center">Enter the code announced by your host.</p>
+    <div class="field"><label>GAME CODE</label><input id="gameCodeInput" class="game-code-input" maxlength="15" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="BARFLY"></div>
+    <div id="codeError" class="error"></div>
+    <button id="findGame" class="premium full">CONTINUE</button>
+  </div>
+</section>
+
+<section id="register" class="screen reg-view-auto">
+  <div class="registration-view-switch" role="group" aria-label="Registration view">
+    <span>VIEW</span>
+    <button type="button" class="reg-view-btn active" data-reg-view="auto" aria-pressed="true">AUTO</button>
+    <button type="button" class="reg-view-btn" data-reg-view="mobile" aria-pressed="false">MOBILE</button>
+    <button type="button" class="reg-view-btn" data-reg-view="tablet" aria-pressed="false">TABLET</button>
+  </div>
+  <div id="regSponsor" class="sponsor registration-sponsor"></div>
+  <div class="card registration-card">
+    <div class="kicker">PLAYER REGISTRATION</div>
+    <div class="center"><div class="game-code-display"><small>GAME CODE</small><b id="gameCode">—</b></div></div>
+    <div id="roundRules" class="rules-strip"></div>
+    <div class="field"><label>PLAYER NAME</label><input id="playerName" maxlength="24" autocomplete="nickname" placeholder="Enter your name"></div>
+    <div id="teamField" class="field hidden"><label>CHOOSE TEAM</label><select id="teamSelect"></select><div class="mini-help">Teams are created by the host. Full teams stay visible but cannot be selected.</div></div>
+    <div id="joinError" class="error"></div>
+    <button id="join" class="premium full" disabled>JOIN GAME</button>
+    <button id="shareInvite" class="premium secondary full top-gap">SHARE GAME</button>
+    <button id="changeCode" class="text-button" type="button">Use a different game code</button>
+  </div>
+</section>
+
+<section id="waiting" class="screen">
+  <div id="waitSponsor" class="sponsor"></div>
+  <div class="card center waiting-card">
+    <div class="orb"></div>
+    <h2>YOU'RE IN!</h2>
+    <p>Player: <b id="waitingName"></b></p>
+    <div id="waitingTeam" class="team-chip hidden"></div>
+    <div class="big-stat" id="joinedCount">1</div><p class="muted">Players Joined</p>
+    <div id="waitRules" class="rules-strip"></div>
+    <div class="pill room-code-pill">GAME CODE <b id="waitingCode">—</b></div>
+    <div class="how-to-play">
+      <div class="kicker">HOW TO PLAY</div>
+      <div class="instruction-row"><span>Called letter</span><b>Controls the column</b></div>
+      <div class="instruction-row"><span>Your move</span><b>Choose any empty space in that column</b></div>
+      <div class="instruction-row"><span>Horizontal BINGO</span><b>+1</b></div>
+      <div class="instruction-row"><span>Diagonal BINGO</span><b>+1</b></div>
+      <div class="instruction-row"><span>Vertical line</span><b>No score</b></div>
+      <div class="instruction-row color-bonus"><span>Same-color scoring line</span><b>+2 BINGOS</b></div>
+      <div class="instruction-row"><span>One ball completes multiple lines</span><b>All count</b></div>
+      <p class="note waiting-note">Place one ball per call. If you do nothing, the call expires automatically.</p>
+    </div>
+    <h3>WAITING FOR HOST TO START…</h3>
+    <button id="shareWaiting" class="premium secondary full">SHARE GAME</button>
+  </div>
+</section>
+
+<section id="prestart" class="screen"><div class="prestart-wrap"><div id="preSponsorStage" class="pre-stage"><div class="kicker">THIS ROUND'S GAME IS SPONSORED BY</div><div id="preSponsorName" class="pre-sponsor-name"></div><img id="preSponsorLogo" class="pre-sponsor-logo hidden" alt="Sponsor logo"></div><div id="countdownStage" class="pre-stage hidden"><img class="pre-logo" src="/assets/bingo-rush-title.png" alt="Bingo Rush"><div id="startCount" class="start-count">3</div><div class="kicker">GET READY</div></div></div></section>
+
+<section id="play" class="screen">
+  <div id="gameplayFit" class="gameplay-fit">
+    <div class="topbar live-game-header">
+      <div class="player-header"><div class="brand player-identity" id="playerIdentity">PLAYER</div><div class="pill live-rank">RANK <b id="rank">#1</b></div></div>
+      <div class="status-header"><div class="pill" id="timer">15:00</div><div class="pill live-score">BINGOS <b id="score">0</b></div></div>
+    </div>
+    <div class="call"><div class="ball" id="callBall"><div class="ball-face"><div class="call-face-stack"><span class="call-letter">—</span><span class="call-number">—</span></div></div></div><div class="track" aria-label="Call time remaining"><div class="fill" id="callFill"></div></div></div>
+    <div class="board-zone"><div class="letters"><div class="letter-head">B</div><div class="letter-head">I</div><div class="letter-head">N</div><div class="letter-head">G</div><div class="letter-head">O</div></div>
+    <div id="board" class="board"></div></div>
+    <div id="gameSponsor" class="sponsor gameplay-sponsor"></div>
+  </div>
+</section>
+
+<section id="end" class="screen"><div class="gameover"><div style="width:100%">
+  <div id="gameOverStage"><h1>GAME<br>OVER</h1><p class="muted">Scores are locked.</p></div>
+  <div id="winnerStage" class="hidden"><div class="crown">🏆</div><div class="kicker">BINGO RUSH CHAMPION</div><div class="winner" id="winnerName">—</div><h2><span id="winnerScore">0</span> BINGOS</h2><div id="teamWinnerBlock" class="hidden"><div class="kicker top-gap">WINNING TEAM</div><div class="winner team-winner" id="teamWinnerName">—</div><h3><span id="teamWinnerScore">0</span> TEAM BINGOS</h3></div></div>
+  <div id="finalStage" class="hidden"><div class="card"><h2>FINAL LEADERBOARD</h2><div id="finalLeaderRows"></div></div><div id="finalTeamCard" class="card hidden"><h2>FINAL TEAM LEADERBOARD</h2><div id="finalTeamRows"></div></div><div id="playerResult" class="pill result-pill"></div><button id="shareResult" class="premium full">SHARE MY SCORE</button><div id="endSponsor" class="sponsor"></div><p class="muted">This round is complete. Stay connected — the host can reset this same game room for the next round.</p><div class="pill room-code-pill">GAME CODE <b id="endCode">—</b></div></div>
+</div></div></section>
+<div id="toast" class="toast"></div></main><script src="/app.js?v=1.6.12"></script></body></html>
